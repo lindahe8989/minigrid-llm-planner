@@ -1,0 +1,1497 @@
+
+Episode 1/1
+--------------------------------------------------
+
+Initial State:
+
+Current view (Observer POV):
+. . ↓ . W
+. . . . W
+. . . . W
+. . . . W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W . . . .
+W . . . .
+W . . . .
+W . ↑ . .
+
+State description:
+You are facing south.
+
+The path ahead is clear.
+
+Starting episode execution...
+
+########## Step 1 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+. . . . W
+. . . . W
+. . . . W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W . . . .
+W . . . .
+W . . . .
+W . ↑ . .
+
+State description:
+You are facing south.
+
+The path ahead is clear.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+
+=== Current State ===
+You are facing south.
+
+The path ahead is clear.
+=====================
+
+Reasoning: Since I am facing south and the path ahead is clear, I can move forward without any obstacles. The goal is to reach the destination efficiently, so the best action in this situation is to move forward.
+
+Generated action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 2 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+. . . . W
+. . . . W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W . . . .
+W . . . .
+W . ↑ . .
+
+State description:
+You are facing south.
+
+The path ahead is clear.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 1:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+The path ahead is clear.
+=====================
+
+Reasoning: Since I am currently facing south and the path ahead is clear, the most efficient action is to continue moving forward towards the goal. 
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 3 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+. . . . W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W . . . .
+W . ↑ . .
+
+State description:
+You are facing south.
+
+The path ahead is clear.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 1:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 2:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+The path ahead is clear.
+=====================
+
+Reasoning: Since I am currently facing south and the path ahead is clear, I can continue moving forward towards the goal (G). There are no obstacles in my way, so the most efficient action is to move forward.
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 4 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 1:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 2:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 3:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am currently facing south and there is a wall directly ahead, I cannot move forward. To navigate around the wall, I need to change my direction. 
+
+The most efficient way to proceed would be to turn either left or right. Since I don't have information about what is to my left or right, I will choose to turn right. This will allow me to explore a new direction and potentially find a clear path towards the goal.
+
+Generated action: action: right
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 5 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 1:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 2:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 3:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 4:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing south and there is a wall directly ahead, I cannot move forward. To navigate around the wall, I can either turn left or right. 
+
+If I turn left, I will be facing east, and I can then check if the path is clear in that direction. If I turn right, I will be facing west, and I can also check that direction. 
+
+To maximize my options, I will choose to turn left, which will allow me to explore the east direction next.
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 6 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 1:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 2:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 3:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 4:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 5:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing south and there is a wall directly ahead, I cannot move forward. The next best action is to change my direction. I can either turn left or right to find a clear path. 
+
+If I turn left, I will be facing east, and if I turn right, I will be facing west. I will choose to turn left to face east, as it is generally more likely to lead to open paths in a grid environment.
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 7 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 2:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 3:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 4:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 5:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 6:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing south and there is a wall directly ahead, I cannot move forward. To navigate around the wall, I can either turn left or right. 
+
+If I turn left, I will be facing east and can potentially move forward if the path is clear. If I turn right, I will be facing west, which may also allow me to move forward if there is no wall in that direction. 
+
+To maximize my options, I will turn left first, as this may open up a new path towards the goal.
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 8 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 3:
+State: You are facing south.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 4:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 5:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 6:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 7:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing south and there is a wall directly ahead, I cannot move forward. To navigate around the wall, I need to change my direction. The most efficient way to do this is to turn left or right. 
+
+If I turn left, I will be facing east, and if I turn right, I will be facing west. Either direction will allow me to move away from the wall. However, since I don't have information about what lies to the east or west, I will choose to turn left to face east.
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 9 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 4:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 5:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 6:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 7:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 8:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing south and there is a wall directly ahead, I cannot move forward. To navigate around the wall, I can either turn left or right. 
+
+If I turn left, I will be facing east, and I can then check if there is a clear path to move forward. If I turn right, I will be facing west, and I can also check for a clear path. 
+
+To maximize my options, I will turn left first. 
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 10 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 5:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 6:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 7:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 8:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 9:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing south and there is a wall directly ahead, I cannot move forward. To navigate around the wall, I need to change my direction. The most efficient way to do this is to turn left or right. 
+
+If I turn left, I will be facing east, and if I turn right, I will be facing west. Since I don't have information about what is to my left or right, I will choose to turn left, which will allow me to explore a new direction.
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 11 ##########
+
+Current view (Observer POV):
+. . ↓ . W
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+W . ↑ . .
+
+State description:
+You are facing south.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 6:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 7:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 8:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 9:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 10:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing south.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing south and there is a wall directly ahead, I cannot move forward. The next best option is to change my direction. I can either turn left or right. 
+
+If I turn left, I will be facing east, and if I turn right, I will be facing west. I need to choose a direction that will allow me to navigate around the wall and continue towards the goal. 
+
+Turning left (to face east) seems like a reasonable choice, as it may open up more pathways to explore. 
+
+Therefore, I will take the action:
+
+Generated action: left
+
+Executing action: left (value: 0)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 12 ##########
+
+Current view (Observer POV):
+. . W W W
+. . W W W
+→ . W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+. . . W W
+. . ↑ W W
+
+State description:
+You are facing east.
+
+The path ahead is clear.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 7:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 8:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 9:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 10:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 11:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: left
+
+
+=== Current State ===
+You are facing east.
+
+The path ahead is clear.
+=====================
+
+Reasoning: Since I am currently facing east and the path ahead is clear, I can move forward towards the goal (G). There are no walls blocking my way, so the most efficient action is to proceed in that direction.
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 13 ##########
+
+Current view (Observer POV):
+. W W W W
+. W W W W
+→ W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+. . ↑ W W
+
+State description:
+You are facing east.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 8:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 9:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 10:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 11:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 12:
+State: You are facing east.
+
+The path ahead is clear.
+Action taken: forward
+
+
+=== Current State ===
+You are facing east.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing east and there is a wall directly ahead, I cannot move forward. The next best option is to turn left, which will change my direction to face north. This will allow me to explore the area further and potentially find a path towards the goal (G).
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 14 ##########
+
+Current view (Observer POV):
+. W W W W
+. W W W W
+→ W W W W
+W W W W W
+W W W W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+. . ↑ W W
+
+State description:
+You are facing east.
+
+There is a wall directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 9:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 10:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 11:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 12:
+State: You are facing east.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 13:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: forward
+
+
+=== Current State ===
+You are facing east.
+
+There is a wall directly ahead.
+=====================
+
+Reasoning: Since I am facing east and there is a wall directly ahead, I cannot move forward. The next best action is to change my orientation. I can either turn left to face north or right to face south. 
+
+Turning left to face north seems more promising because it may provide a clearer path to navigate around the wall. 
+
+Therefore, I will take the action: 
+
+Generated action: left
+
+Executing action: left (value: 0)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 15 ##########
+
+Current view (Observer POV):
+. . . W W
+. . . W W
+. . . W W
+. . . W W
+. . ↑ W W
+
+Current view (Agent POV):
+. . . W W
+. . . W W
+. . . W W
+. . . W W
+. . ↑ W W
+
+State description:
+You are facing north.
+
+The path ahead is clear.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 10:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 11:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 12:
+State: You are facing east.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 13:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 14:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: left
+
+
+=== Current State ===
+You are facing north.
+
+The path ahead is clear.
+=====================
+
+Reasoning: Since I am currently facing north and the path ahead is clear, the most efficient action to take is to move forward towards the goal (G). 
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 16 ##########
+
+Current view (Observer POV):
+. G . W W
+. . . W W
+. . . W W
+. . . W W
+. . ↑ W W
+
+Current view (Agent POV):
+. G . W W
+. . . W W
+. . . W W
+. . . W W
+. . ↑ W W
+
+State description:
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 11:
+State: You are facing south.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 12:
+State: You are facing east.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 13:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 14:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 15:
+State: You are facing north.
+
+The path ahead is clear.
+Action taken: forward
+
+
+=== Current State ===
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+=====================
+
+Reasoning: Since I am currently facing north and the path ahead is clear, I can move forward. However, the goal is located ahead and to the left, which means I will need to adjust my direction to reach it efficiently. 
+
+To get to the goal, I can first move forward to maintain my current direction, and then I can turn left to face the goal directly. 
+
+Thus, the most efficient action to take right now is to move forward.
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 17 ##########
+
+Current view (Observer POV):
+W W W W W
+. G . W W
+. . . W W
+. . . W W
+. . ↑ W W
+
+Current view (Agent POV):
+W W W W W
+. G . W W
+. . . W W
+. . . W W
+. . ↑ W W
+
+State description:
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 12:
+State: You are facing east.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 13:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 14:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 15:
+State: You are facing north.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 16:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+
+=== Current State ===
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+=====================
+
+Reasoning: In the current state, I am facing north, and the goal is located ahead and to the left. Since I can move forward without obstruction, I will first move forward to get closer to the goal. After that, I will need to turn left to align myself with the goal.
+
+For this step, the most efficient action is to move forward.
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 18 ##########
+
+Current view (Observer POV):
+W W W W W
+W W W W W
+. G . W W
+. . . W W
+. . ↑ W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+. G . W W
+. . . W W
+. . ↑ W W
+
+State description:
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 13:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: forward
+
+Step 14:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 15:
+State: You are facing north.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 16:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 17:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+
+=== Current State ===
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+=====================
+
+Reasoning: In the current state, I am facing north, and the path ahead is clear. However, the goal (G) is located to my left. To efficiently reach the goal, I should turn left to face west, which will allow me to move directly towards the goal.
+
+Therefore, the best action to take is to turn left.
+
+Generated action: action: left
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 19 ##########
+
+Current view (Observer POV):
+W W W W W
+W W W W W
+W W W W W
+. G . W W
+. . ↑ W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+. G . W W
+. . ↑ W W
+
+State description:
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 14:
+State: You are facing east.
+
+There is a wall directly ahead.
+Action taken: left
+
+Step 15:
+State: You are facing north.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 16:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 17:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 18:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+
+=== Current State ===
+You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+=====================
+
+Reasoning: In the current state, I am facing north, and the goal is located to my left. Since I can move forward, I will first move forward to maintain my position while keeping the goal in sight. After that, I can turn left to align myself directly towards the goal. 
+
+For this step, the most efficient action is to move forward.
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 20 ##########
+
+Current view (Observer POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+. G ↑ W W
+
+Current view (Agent POV):
+W W W W W
+W W W W W
+W W W W W
+W W W W W
+. G ↑ W W
+
+State description:
+You are facing north.
+
+There is a wall directly ahead.
+The goal is to the left.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 15:
+State: You are facing north.
+
+The path ahead is clear.
+Action taken: forward
+
+Step 16:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 17:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 18:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 19:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+
+=== Current State ===
+You are facing north.
+
+There is a wall directly ahead.
+The goal is to the left.
+=====================
+
+Reasoning: Since I am facing north and there is a wall directly ahead, I cannot move forward. However, the goal is to my left. To reach the goal efficiently, I should turn left to face west, which will allow me to move towards the goal.
+
+Therefore, the action I will take is:
+
+Generated action: left
+
+Executing action: left (value: 0)
+Step result: reward=0, terminated=False, truncated=False
+
+########## Step 21 ##########
+
+Current view (Observer POV):
+W W W W W
+W W W W W
+. . . G ←
+. . . . .
+. . . . .
+
+Current view (Agent POV):
+. . . W W
+. . . W W
+. . . W W
+. . G W W
+. . ↑ W W
+
+State description:
+You are facing west.
+
+There is a goal directly ahead.
+The goal is directly ahead.
+
+Observing state and reasoning:
+
+Observing state and reasoning:
+
+=== Historical Context ===
+Previous steps:
+Step 16:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 17:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 18:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 19:
+State: You are facing north.
+
+The path ahead is clear.
+The goal is ahead and to the left.
+Action taken: forward
+
+Step 20:
+State: You are facing north.
+
+There is a wall directly ahead.
+The goal is to the left.
+Action taken: left
+
+
+=== Current State ===
+You are facing west.
+
+There is a goal directly ahead.
+The goal is directly ahead.
+=====================
+
+Reasoning: Since I am currently facing west and the goal is directly ahead, I can simply move forward to reach the goal. There are no walls in my way, and the goal is within reach.
+
+Generated action: action: forward
+
+Executing action: forward (value: 2)
+Step result: reward=0.926171875, terminated=True, truncated=False
+
+Results saved to results/baseline_experiments_20241127_150533/random_goal_empty/episode_001

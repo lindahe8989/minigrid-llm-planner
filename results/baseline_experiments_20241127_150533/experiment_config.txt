@@ -1,0 +1,8 @@
+Experiment Parameters:
+Model: gpt-4o-mini
+Episodes: 10
+View Size: 5
+Max Steps: 50
+Temperature: 0.2
+Seed: 42
+Timestamp: 20241127_150533
