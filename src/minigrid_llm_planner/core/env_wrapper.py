@@ -91,22 +91,20 @@ class MinigridEnvWrapper(gym.Wrapper):
                     )
         return None
 
-    def _generate_relative_position(self, i: int, j: int, center_x: int, 
-                                  agent_y: int, is_facing_south: bool) -> str:
-        """Generate relative position description.
+    def _generate_agent_position_in_grid(self) -> Tuple[int, int]:
+        """Get the agent's absolute position in the grid.
         
-        Args:
-            i, j: Current cell coordinates
-            center_x: X coordinate of center
-            agent_y: Y coordinate of agent
-            is_facing_south: Whether agent is facing south
-            
         Returns:
-            Description string
+            Tuple[int, int]: (x, y) coordinates of the agent in the grid
         """
-        if is_facing_south:
-            return self._get_south_facing_description(i, j, center_x, agent_y)
-        return self._get_normal_description(i, j, center_x, agent_y)
+        if self.last_obs is None:
+            raise ValueError("No observation available. Did you call reset()?")
+            
+        env = self.env.unwrapped
+        agent_pos = (int(env.agent_pos[0]), int(env.agent_pos[1]))
+        
+        print(f"Agent absolute position: {agent_pos}")
+        return agent_pos
 
     def reset(self, seed=None, options=None):
         """Reset the environment."""

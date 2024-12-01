@@ -64,11 +64,15 @@ class MinigridLLMAgent:
                 
             action_name = self.planner.generate_plan(state_desc, self.history)
 
-            # Store state and action in history
+            # Get agent's position from the environment wrapper
+            position_in_grid = self.wrapped_env._generate_agent_position_in_grid()
+
+            # Store state, action, and position in history
             self.history.append({
                 'state': state_desc,
                 'action': action_name,
-                'step': steps_taken + 1
+                'step': steps_taken + 1,
+                'position': position_in_grid  # Add position to history
             })
             
             # Keep history to a reasonable size (last N steps)

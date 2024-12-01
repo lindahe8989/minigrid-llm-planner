@@ -10,7 +10,8 @@ def register_environments(agent_view_size: int):
     """Register custom environments with Gymnasium."""
     try:
         gym.register(
-            id='MiniGrid-RandomGoalEmpty-8x8-v0',
+            # id='MiniGrid-RandomGoalEmpty-8x8-v0',
+            id = 'MiniGrid-FourRooms-v0',
             entry_point='src.minigrid_llm_planner.core.random_goal_env:RandomGoalEmptyEnv',
             kwargs={'size': 8, 'agent_view_size': agent_view_size}
         )
