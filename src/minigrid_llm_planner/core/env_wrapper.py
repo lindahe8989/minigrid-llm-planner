@@ -272,56 +272,89 @@ class MinigridEnvWrapper(gym.Wrapper):
         return "\n".join(view_lines)
 
     def get_state_description(self) -> str:
-        """Convert current observation to text description."""
+        """Generate a natural language description of the current state."""
         if self.last_obs is None:
             raise ValueError("No observation available. Did you call reset()?")
-
+            
         env = self.env.unwrapped
-        agent_dir = DIRECTION_TEXT[Direction(env.agent_dir)]
+        agent_dir = env.agent_dir  # 0: right, 1: down, 2: left, 3: up
         
-        # Get the standardized grid view
-        grid, vis_mask = env.gen_obs_grid()
+        # Basic direction description
+        direction_map = {0: "east", 1: "south", 2: "west", 3: "north"}
+        description = f"You are facing {direction_map[agent_dir]}.\n\n"
         
-        description = [f"You are facing {agent_dir}.\n"]
+        # Get what's in front of the agent
+        front_cell = env.grid.get(*env.front_pos) if env.front_pos is not None else None
         
         # Describe what's directly ahead
-        center_x = grid.width // 2
-        agent_y = grid.height - 1
-        front_cell = grid.get(center_x, agent_y - 1)
-        
         if front_cell is None:
-            description.append("The path ahead is clear.")
+            description += "The path ahead is clear."
         else:
-            description.append(f"There is a {front_cell.type} directly ahead.")
+            if front_cell.type == 'wall':
+                description += "There is a wall directly ahead."
+            elif front_cell.type == 'door':
+                if front_cell.is_locked:
+                    description += "There is a locked door directly ahead."
+                else:
+                    description += "There is an unlocked door directly ahead."
+            elif front_cell.type == 'key':
+                description += "There is a key directly ahead."
+            elif front_cell.type == 'goal':
+                description += "There is a goal directly ahead."
             
-        # Look for goal
-        for j in range(grid.height):
-            for i in range(grid.width):
-                cell = grid.get(i, j)
-                if cell and cell.type == "goal":
-                    # When facing south, the coordinate system is flipped 180 degrees
-                    if env.agent_dir == Direction.DOWN:  # Facing south
-                        if i < center_x and j < agent_y:
-                            description.append("The goal is ahead and to the left.")  # Changed from right
-                        elif i > center_x and j < agent_y:
-                            description.append("The goal is ahead and to the right.")  # Changed from left
-                        elif i < center_x:
-                            description.append("The goal is to the left.")  # Changed from right
-                        elif i > center_x:
-                            description.append("The goal is to the right.")  # Changed from left
-                        else:
-                            description.append("The goal is directly ahead.")
-                    else:
-                        if i < center_x and j < agent_y:
-                            description.append("The goal is ahead and to the left.")
-                        elif i > center_x and j < agent_y:
-                            description.append("The goal is ahead and to the right.")
-                        elif i < center_x:
-                            description.append("The goal is to the left.")
-                        elif i > center_x:
-                            description.append("The goal is to the right.")
-                        else:
-                            description.append("The goal is directly ahead.")
-                    break
+        # Look for important objects in view
+        view = env.grid.slice(env.agent_pos[0]-2, env.agent_pos[1]-2, 5, 5)  # Expand view to 5x5
+        center_x, center_y = 2, 2  # Center of 5x5 view
         
-        return "\n".join(description)
+        for i in range(view.width):
+            for j in range(view.height):
+                cell = view.get(i, j)
+                if cell is not None and (i, j) != (center_x, center_y):  # Skip agent's position
+                    dx, dy = i - center_x, j - center_y  # Relative coordinates
+                    if cell.type == 'door' or cell.type == 'key':
+                        print('dx', dx)
+                        print('dy', dy)
+                        rel_pos = self._get_detailed_position(dx, dy)
+                        if cell.type == 'door':
+                            if cell.is_locked:
+                                description += f"\nThere is a locked door {rel_pos}."
+                            else:
+                                description += f"\nThere is an unlocked door {rel_pos}."
+                        else:  # key
+                            description += f"\nThere is a key {rel_pos}."
+                    
+        # Add key status to description if agent has key
+        if hasattr(env, 'carrying') and env.carrying:
+            if env.carrying.type == 'key':
+                description += "\nYou are carrying a key."
+        
+        return description
+
+    def _get_detailed_position(self, dx: int, dy: int) -> str:
+        """Convert relative coordinates to detailed natural language direction.
+        
+        Args:
+            dx: relative x coordinate (positive = right, negative = left)
+            dy: relative y coordinate (positive = ahead, negative = behind)
+            
+        Returns:
+            str: Natural language description of relative position
+        """
+        distance = abs(dx) + abs(dy)
+        if distance == 1:  # Directly adjacent
+            if dx == 1: return "one step to the right"
+            if dx == -1: return "one step to the left"
+            if dy == 1: return "one step ahead"  # Changed from behind to ahead
+            return "one step behind"  # Changed from ahead to behind
+        else:  # Diagonal or further away
+            x_desc = ""
+            y_desc = ""
+            if dx > 0: x_desc = f"{abs(dx)} steps to the right"
+            elif dx < 0: x_desc = f"{abs(dx)} steps to the left"
+            
+            if dy > 0: y_desc = f"{abs(dy)} steps ahead"  # Changed from behind to ahead
+            elif dy < 0: y_desc = f"{abs(dy)} steps behind"  # Changed from ahead to behind
+            
+            if x_desc and y_desc:
+                return f"{x_desc} and {y_desc}"
+            return x_desc or y_desc

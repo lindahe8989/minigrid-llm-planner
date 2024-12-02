@@ -19,6 +19,14 @@ class LLMPlanner:
         self.visited_positions = {}  # (x,y) -> {direction: count}
         self.movement_history = []   # List of (pos, direction) tuples
         self.unexplored_directions = set()  # Tracks which directions haven't been tried at each position
+        self.last_abstract_state = None
+        self.door_seen = False
+        self.door_direction = None  # 'east', 'west', etc.
+        self.has_key = False
+        self.door_position = None  # When door is seen
+        self.key_position = None   # When key is seen
+        self.explored_positions = set()  # Track where we've been
+        self.last_action = None
 
     def _update_exploration_memory(self, position: tuple, hit_wall: bool = False):
         """Update visit counts and dead ends."""
@@ -80,6 +88,25 @@ class LLMPlanner:
         # Need to turn around
         return 'right'  # Will take two turns
 
+    def _get_abstract_state(self, state_desc):
+        """Enhanced state abstraction with door/key priority"""
+        abstract_states = []
+        
+        # Check for key/door in view
+        if 'key' in state_desc.lower():
+            abstract_states.append("key_visible")
+        if 'door' in state_desc.lower():
+            self.door_seen = True
+            abstract_states.append("door_visible")
+            
+        # Basic position state
+        if 'wall directly ahead' in state_desc.lower():
+            abstract_states.append("at_wall")
+        else:
+            abstract_states.append("path_clear")
+            
+        return abstract_states
+
     def generate_plan(self, state_description: str, history: list) -> str:
         """Generate next action based on current state observation."""
         try:
@@ -108,6 +135,36 @@ class LLMPlanner:
             print(state_description)
             print("=====================\n")
 
+            # Get abstract state
+            abstract_state = self._get_abstract_state(state_description)
+            
+            # Detect if stuck in same abstract state
+            if self.last_abstract_state == abstract_state and "at_wall" in abstract_state:
+                print("Stuck in same abstract state, changing strategy...")
+                self.last_abstract_state = abstract_state
+                return "right"  # Simple escape strategy
+                
+            self.last_abstract_state = abstract_state
+            
+            # Include abstract state in prompt
+            prompt = f"""
+            === Current State ===
+            {state_description}
+            Abstract state: {', '.join(abstract_state)}
+            =====================
+            
+            You are an agent trying to navigate through a grid world. Your goal is to reach the target/goal, but you need to be strategic:
+            1. Sometimes, you will need to get a key to open a door in order to open up new paths and see the goal. 
+            2. To do so, you must first find the key and then use the key to open the door. 
+            3. If you haven't gotten the key when you see the door, remember the door's location and continue exploring.
+            4. The state description will tell you the location of the door/key relative to you. For exmple, it will say There is a locked door 1 steps to the right and 2 steps ahead.
+            When this happens, if you already have the key, you should move towards the door -- meaning you should go forward two times, turn right once, and then go forward once. 
+            If you do not have the key, ignore the door and continue exploring/go forward. 
+            4. Just because a path is clear doesn't mean you should take it - think about your goal
+            
+            What action should I take? Consider the door/key first before deciding to move forward.
+            """
+            
             system_prompt = f"""You are a navigation agent in a grid world. Your task is to reach the goal (G).
 Available actions are:
 - 'forward': Move one step forward (You cannot move forward if you are facing a wall)
@@ -127,7 +184,7 @@ First explain your reasoning, then respond with a single word action from the li
 
             messages = [
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": state_description}
+                {"role": "user", "content": prompt}
             ]
 
             response = self.client.chat.completions.create(
@@ -177,3 +234,89 @@ First explain your reasoning, then respond with a single word action from the li
         except Exception as e:
             print(f"Error in planning: {str(e)}")
             return "forward"
+
+    def get_current_goal(self):
+        if not self.has_key and self.key_position:
+            return "reach_key"
+        elif self.has_key and self.door_position:
+            return "reach_door"
+        elif not self.has_key and not self.key_position:
+            return "explore_for_key"
+        else:
+            return "explore_for_door"
+
+    def _analyze_view(self, view):
+        """Extract key information from the agent's view matrix"""
+        info = {
+            'has_key': self.has_key,
+            'door_visible': False,
+            'door_location': None,
+            'can_interact_with_door': False
+        }
+        
+        # Convert view to string for analysis
+        view_str = str(view)
+        
+        # Look for door in view
+        if 'D' in view_str:
+            info['door_visible'] = True
+            # Additional door position analysis...
+            
+        return info
+
+    def _analyze_state(self, state_desc, view):
+        """Analyze state and view to extract key information"""
+        info = {
+            'has_key': self.has_key,
+            'door_visible': False,
+            'can_open_door': False,
+            'at_door': False
+        }
+        
+        # Update key status if we just picked up a key
+        if self.last_action == 'pickup' and 'key' in state_desc.lower():
+            self.has_key = True
+            
+        # Look for door in view matrix
+        if 'D' in str(view):
+            info['door_visible'] = True
+            # Check if we're right at the door
+            if 'door directly ahead' in state_desc.lower():
+                info['at_door'] = True
+                if self.has_key:
+                    info['can_open_door'] = True
+                    
+        return info
+
+    def plan_action(self, state_desc, history):
+        # Update key status based on previous actions
+        if self.last_action == 'pickup' and 'key' in state_desc.lower():
+            self.has_key = True
+            
+        view_info = self._analyze_view(history[-1].get('view', []))
+        
+        prompt = f"""
+        === Current State ===
+        {state_desc}
+        
+        Important Information:
+        - Have key: {self.has_key}
+        - Door visible: {view_info['door_visible']}
+        - Door location: {view_info['door_location']}
+        
+        Priority Rules:
+        1. If you see a key and don't have one, getting it is top priority
+        2. If you have a key AND see a door, then going to the door is priority
+        3. If you see a door but don't have a key, IGNORE the door and continue exploring
+        4. When exploring, prefer moving forward and turning only when blocked
+        
+        What single action should you take? Think step by step.
+        """
+        
+        # Force toggle if at door with key
+        if view_info['can_interact_with_door'] and self.has_key:
+            return 'toggle'
+            
+        action = self._get_action_from_llm(prompt)
+        self.last_action = action
+        return action
