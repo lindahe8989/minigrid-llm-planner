@@ -27,6 +27,7 @@ class LLMPlanner:
         self.key_position = None   # When key is seen
         self.explored_positions = set()  # Track where we've been
         self.last_action = None
+        self.door_opened = False # Track if the door has been opened 
 
     def _update_exploration_memory(self, position: tuple, hit_wall: bool = False):
         """Update visit counts and dead ends."""
@@ -118,6 +119,10 @@ class LLMPlanner:
                 hit_wall = "wall" in state_description.lower()
                 self._update_exploration_memory(current_pos, hit_wall)
 
+            # Check if the door is opened 
+            if "unlocked door" in state_description.lower():
+                self.door_opened = True 
+
             # Format history into a readable string
             history_context = ""
             if history:
@@ -129,8 +134,8 @@ class LLMPlanner:
                     history_context += f"Agent Position: {entry['position']}\n\n"
 
             # Print the context
-            print("\n=== Historical Context ===")
-            print(history_context)
+            # print("\n=== Historical Context ===")
+            # print(history_context)
             print("=== Current State ===")
             print(state_description)
             print("=====================\n")
@@ -157,10 +162,18 @@ class LLMPlanner:
             1. Sometimes, you will need to get a key to open a door in order to open up new paths and see the goal. 
             2. To do so, you must first find the key and then use the key to open the door. 
             3. If you haven't gotten the key when you see the door, remember the door's location and continue exploring.
-            4. The state description will tell you the location of the door/key relative to you. For exmple, it will say There is a locked door 1 steps to the right and 2 steps ahead.
-            When this happens, if you already have the key, you should move towards the door -- meaning you should go forward two times, turn right once, and then go forward once. 
-            If you do not have the key, ignore the door and continue exploring/go forward. 
-            4. Just because a path is clear doesn't mean you should take it - think about your goal
+            4. The state description will tell you if you've already unlocked a door. If you have:
+               - Focus on exploring new areas beyond the door to find the goal
+               - Don't waste time looking for more keys or checking other doors
+               - The goal is likely in an area you couldn't access before
+            5. If you haven't unlocked any doors yet:
+               - Prioritize finding a key if you don't have one
+               - If you have a key, prioritize finding and unlocking a door
+            6. The state description will tell you the location of the door/key relative to you.
+            7. If you have a key and you see the door, you should first move towards the door, and then toggle it. 
+            If the door is one step away from you (like one step right or one step left but never one step right and one step left), you should change your direction to face the door (unless you are already facing it). 
+            If you are directly facing it and one step away, you should just toggle the door instead of moving toward it.
+            8. Just because a path is clear doesn't mean you should take it - think about your goal
             
             What action should I take? Consider the door/key first before deciding to move forward.
             """
@@ -203,6 +216,11 @@ First explain your reasoning, then respond with a single word action from the li
             print(f"Reasoning: {reasoning}")
             print(f"Generated action: {action}")
             
+            # If the door is opened, focus on reaching the goal 
+            if self.door_opened:
+                print("Door is opened, focusing on reaching the goal...")
+                # Implement logic to prioritize reaching the goal
+                # For example, if the path is clear, move forward
             # First priority: If path is clear and action is forward, ALWAYS take it
             if "path ahead is clear" in state_description.lower() and action == 'forward':
                 return action
@@ -228,6 +246,13 @@ First explain your reasoning, then respond with a single word action from the li
                     # For any other repeated action, try turning right
                     else:
                         return 'right'
+            # If the door is unlocked, focus on exploration
+            if "already unlocked a door" in state_description:
+                print("Door is unlocked, focusing on reaching the goal...")
+                # Prioritize forward movement and exploration of new areas
+                if "path ahead is clear" in state_description.lower():
+                    return "forward"
+                    
             return action
             return "forward"  # Default to forward if invalid response
 

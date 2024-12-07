@@ -30,6 +30,9 @@ class MinigridEnvWrapper(gym.Wrapper):
         
         # Initialize full grid with correct size
         self.full_grid = np.zeros((self.grid_size[1], self.grid_size[0], 3), dtype=np.uint8)
+        
+        # Add door tracking
+        self.door_unlocked = False
 
     def _transform_grid_by_direction(self, grid: NDArray, agent_dir: int) -> NDArray:
         """Transform grid based on agent's direction.
@@ -108,6 +111,9 @@ class MinigridEnvWrapper(gym.Wrapper):
 
     def reset(self, seed=None, options=None):
         """Reset the environment."""
+        # Reset door tracking
+        self.door_unlocked = False
+        
         obs, info = self.env.reset(seed=seed, options=options)
         self.last_obs = obs
         
@@ -139,6 +145,12 @@ class MinigridEnvWrapper(gym.Wrapper):
         
         # Update the full grid with new observation
         self._update_full_grid(obs['image'], env.agent_pos, env.agent_dir)
+        
+        # Check if a door was unlocked in this step
+        front_cell = env.grid.get(*env.front_pos) if env.front_pos is not None else None
+        if action == 5:  # toggle action
+            if front_cell and front_cell.type == 'door' and not front_cell.is_locked:
+                self.door_unlocked = True
         
         # Add visualization data to info dictionary
         info.update({
@@ -271,7 +283,8 @@ class MinigridEnvWrapper(gym.Wrapper):
         
         return "\n".join(view_lines)
 
-    def get_state_description(self) -> str:
+
+    def get_state_description(self) -> str: 
         """Generate a natural language description of the current state."""
         if self.last_obs is None:
             raise ValueError("No observation available. Did you call reset()?")
@@ -301,28 +314,56 @@ class MinigridEnvWrapper(gym.Wrapper):
                 description += "There is a key directly ahead."
             elif front_cell.type == 'goal':
                 description += "There is a goal directly ahead."
-            
-        # Look for important objects in view
-        view = env.grid.slice(env.agent_pos[0]-2, env.agent_pos[1]-2, 5, 5)  # Expand view to 5x5
-        center_x, center_y = 2, 2  # Center of 5x5 view
         
-        for i in range(view.width):
-            for j in range(view.height):
-                cell = view.get(i, j)
-                if cell is not None and (i, j) != (center_x, center_y):  # Skip agent's position
-                    dx, dy = i - center_x, j - center_y  # Relative coordinates
-                    if cell.type == 'door' or cell.type == 'key':
-                        print('dx', dx)
-                        print('dy', dy)
-                        rel_pos = self._get_detailed_position(dx, dy)
-                        if cell.type == 'door':
-                            if cell.is_locked:
-                                description += f"\nThere is a locked door {rel_pos}."
-                            else:
-                                description += f"\nThere is an unlocked door {rel_pos}."
-                        else:  # key
-                            description += f"\nThere is a key {rel_pos}."
+        # Get the agent's view grid and visibility mask
+        grid, vis_mask = env.gen_obs_grid()
+        
+        # Flags to track if a key or door has been described
+        key_described = False
+        door_described = False
+        
+        # Center of the agent's view
+        center_x = grid.width // 2
+        center_y = grid.height - 1  # Agent is at the bottom center
+        
+        for i in range(grid.width):
+            for j in range(grid.height):
+                # Only process visible cells
+                if not vis_mask[i, j]:
+                    continue
                     
+                cell = grid.get(i, j)
+                # print(f"\nChecking visible cell ({i},{j}):")
+                # print(f"Cell content: {cell}")
+                
+                if cell is not None and (i, j) != (center_x, center_y):
+                    dx = i - center_x
+                    dy = center_y - j  # Flip y since grid coordinates increase downward
+                    # print(f"Relative position: dx={dx}, dy={dy}")
+                    # print(f"Cell type: {cell.type}")
+                    
+                    if cell.type == 'key' and not key_described:
+                        rel_pos = self._get_detailed_position(dx, dy)
+                        # print(f"Found key at {rel_pos}")
+                        description += f"\nThere is a key {rel_pos}."
+                        key_described = True
+                        
+                    elif cell.type == 'door' and not door_described:
+                        rel_pos = self._get_detailed_position(dx, dy)
+                        # print(f"Found door at {rel_pos}")
+                        if cell.is_locked:
+                            description += f"\nThere is a locked door {rel_pos}."
+                        else:
+                            description += f"\nThere is an unlocked door {rel_pos}."
+                        door_described = True
+                        
+                    if key_described and door_described:
+                        break
+        
+        # Add door unlocked status to description
+        if self.door_unlocked:
+            description += "\nYou have already unlocked a door in this environment."
+            
         # Add key status to description if agent has key
         if hasattr(env, 'carrying') and env.carrying:
             if env.carrying.type == 'key':
